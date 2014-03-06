@@ -8,13 +8,13 @@ module Dossier
         def initialize(activerecord_result)
           self.result = activerecord_result
         end
-
+  
         def headers
-          result.columns
+          self.result.column_names
         end
 
         def rows
-          result.rows
+          result
         end
 
       end

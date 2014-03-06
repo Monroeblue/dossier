@@ -2,17 +2,18 @@ require 'csv'
 
 module Dossier
   class StreamCSV
-    attr_reader :headers, :collection
+    attr_reader :report, :headers, :collection
 
-    def initialize(collection, headers = nil)
-      @headers    = headers || collection.shift unless false === headers
-      @collection = collection
+    def initialize(report)
+      @report = report
+      @headers    = report.columns.select{|col| col unless report.format_header(col).blank? }
+      @collection = report.raw_results
     end
 
     def each
-      yield headers.map { |header| Dossier::Formatter.titleize(header) }.to_csv if headers?
+      yield headers.map { |header| report.format_header(header) }.to_csv if headers?
       collection.each do |record|
-        yield record.to_csv
+        yield headers.collect{|h| record.send(h)}.to_csv
       end
     rescue => e
       if Rails.application.config.consider_all_requests_local

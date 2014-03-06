@@ -42,7 +42,7 @@ module Dossier
     # this is the method that creates the individual hash entry
     # hashes should always use raw headers
     def row_hash(row)
-      Hash[raw_headers.zip(row)].with_indifferent_access
+      Hash[self.report.columns.map {|v| [v,row.send(v)]}]
     end
 
     def each
@@ -52,7 +52,7 @@ module Dossier
     class Formatted < Result
 
       def headers
-        @formatted_headers ||= raw_headers.map { |h| report.format_header(h) }
+              @formatted_headers ||= self.report.columns.map { |h| report.format_header(h) }
       end
 
       def each
@@ -60,24 +60,35 @@ module Dossier
       end
 
       def format(row)
-        unless row.kind_of?(Enumerable)
-          raise ArgumentError.new("#{row.inspect} must be a kind of Enumerable") 
-        end
-
-        row.each_with_index.map do |value, i|
-          column = raw_headers.at(i)
-          method = "format_#{column}"
+       
+        self.report.columns.each_with_index.map do |value, i|
+          
+          if row.is_a?(ActiveRecord::Base)
+            column = value
+            method = "format_#{column}"
+            value  = row.send(value)
+          else
+            column = raw_headers.at(i)
+            method = "format_#{column}"
+          end
 
           if report.respond_to?(method)
             args = [method, value]
             # Provide the row as context if the formatter takes two arguments
-            args << row_hash(row) if report.method(method).arity == 2
+            if report.method(method).arity == 2
+              if row.is_a?(ActiveRecord::Base) 
+                args << row
+              else
+                 args << row_hash(row) 
+              end
+            end
             report.public_send(*args)
           else
             report.format_column(column, value)
           end
         end
       end
+ 
     end
 
     class Unformatted < Result

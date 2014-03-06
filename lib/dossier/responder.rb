@@ -13,12 +13,12 @@ module Dossier
 
     def to_csv
       set_content_disposition!
-      controller.response_body = StreamCSV.new(report.raw_results.arrays)
+      controller.response_body = StreamCSV.new(report)
     end
 
     def to_xls
       set_content_disposition!
-      controller.response_body = Xls.new(report.raw_results.arrays)
+      controller.response_body = Xls.new(report)
     end
 
     def respond
