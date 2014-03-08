@@ -66,7 +66,13 @@ module Dossier
           if row.is_a?(ActiveRecord::Base)
             column = value
             method = "format_#{column}"
-            value  = row.send(value)
+          
+            args = [column]
+          #  puts "ARITY #{column}  #{row.method(column).arity}"
+            if row.method(column).arity == -1            
+               args << self.report.options
+            end            
+            value  = row.public_send(*args)
           else
             column = raw_headers.at(i)
             method = "format_#{column}"
