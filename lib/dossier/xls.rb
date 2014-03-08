@@ -24,8 +24,18 @@ module Dossier
       %{<Cell><Data ss:Type="String">#{el}</Data></Cell>}
     end
 
-    def as_ar_row(array)
-      "<Row>\n" +  headers.collect{|h| as_cell(array.send(h))}.join("\n") + "\n</Row>\n"
+    def as_ar_row(row)
+      "<Row>\n" +  headers.collect{|column| 
+        
+        args = [column]
+        
+        if row.method(column).arity == -1            
+           args << report.options
+        end    
+        
+        as_cell(row.public_send(*args))
+      
+      }.join("\n") + "\n</Row>\n"
     end
 	
     def as_row(array)

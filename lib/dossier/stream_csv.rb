@@ -12,8 +12,19 @@ module Dossier
 
     def each
       yield headers.map { |header| report.format_header(header) }.to_csv if headers?
-      collection.each do |record|
-        yield headers.collect{|h| record.send(h)}.to_csv
+      collection.each do |row|
+        yield headers.collect{|column| 
+                  
+            args = [column]
+            
+            if row.method(column).arity == -1            
+               args << report.options
+            end    
+                    
+            value  = row.public_send(*args)
+         
+        
+        }.to_csv
       end
     rescue => e
       if Rails.application.config.consider_all_requests_local
