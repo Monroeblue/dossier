@@ -17,7 +17,7 @@ module Dossier
                   
             args = [column]
             
-            if row.method(column).arity == -1            
+            if (row.method(column).arity == -1  rescue false)          
                args << report.options
             end    
                     

@@ -69,12 +69,12 @@ module Dossier
           
             args = [column]
           #  puts "ARITY #{column}  #{row.method(column).arity}"
-            if row.method(column).arity == -1            
+            if (row.method(column).arity == -1  rescue false)          
                args << self.report.options
             end            
             value  = row.public_send(*args)
           else
-            column = raw_headers.at(i)
+            column = report.columns[i]
             method = "format_#{column}"
           end
 

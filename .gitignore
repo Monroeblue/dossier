@@ -13,3 +13,5 @@ spec/dummy/tmp/
 spec/dummy/.sass-cache
 spec/fixtures/db/*.yml
 spec/fixtures/db/*.sqlite3
+
+.DS_Store
