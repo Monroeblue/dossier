@@ -7,7 +7,7 @@ module Dossier
     attr_accessor :config_path, :connection_options, :client
 
     def initialize
-      @config_path = Rails.root.join('config', 'dossier.yml')
+      @config_path = Rails.root.join('config', 'database.yml')
       setup_client!
     end
 
