@@ -58,6 +58,14 @@ module Dossier
     def format_column(column, value)
       value
     end
+    
+    def format_header_alignment(header)
+    end
+
+    def format_header_alignment_by_index(index)
+      format_header_alignment(self.results.headers[index])
+    end
+
 
     def dossier_client
       Dossier.client

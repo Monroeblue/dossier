@@ -52,7 +52,7 @@ module Dossier
     class Formatted < Result
 
       def headers
-              @formatted_headers ||= self.report.columns.map { |h| report.format_header(h) }
+         @formatted_headers ||= self.report.columns.map { |h| report.format_header(h) }
       end
 
       def each
