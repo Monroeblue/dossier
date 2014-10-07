@@ -21,7 +21,11 @@ module Dossier
     private
 
     def as_cell(el)
-      %{<Cell><Data ss:Type="String">#{el}</Data></Cell>}
+      if (Float(self) rescue false)
+        %{<Cell><Data ss:Type="Number">#{el}</Data></Cell>}
+      else
+        %{<Cell><Data ss:Type="String">#{el}</Data></Cell>}
+      end
     end
 
     def as_ar_row(row)
