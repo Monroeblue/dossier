@@ -21,7 +21,7 @@ module Dossier
     private
 
     def as_cell(el)
-      if (Float(el) rescue false)
+      if (Float(el.to_s) rescue false)
         %{<Cell><Data ss:Type="Number">#{el}</Data></Cell>}
       else
         %{<Cell><Data ss:Type="String">#{el}</Data></Cell>}
@@ -29,19 +29,19 @@ module Dossier
     end
 
     def as_ar_row(row)
-      "<Row>\n" +  headers.collect{|column| 
-        
+      "<Row>\n" +  headers.collect{|column|
+
         args = [column]
-        
-        if (row.method(column).arity == -1  rescue false)          
+
+        if (row.method(column).arity == -1  rescue false)
            args << report.options
-        end    
-        
+        end
+
         as_cell(row.public_send(*args))
-      
+
       }.join("\n") + "\n</Row>\n"
     end
-	
+
     def as_row(array)
       my_array = array.map{|a| as_cell(a)}.join("\n")
       "<Row>\n" + my_array + "\n</Row>\n"
