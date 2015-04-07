@@ -21,7 +21,9 @@ module Dossier
     private
 
     def as_cell(el)
-      if (Float(el.to_s) rescue false)
+      if el.kind_of?(Array)
+        %{<Cell><Data ss:Type="String">#{el.map(&:to_s).join(', ')}</Data></Cell>}
+      elsif (Float(el.to_s) rescue false)
         %{<Cell><Data ss:Type="Number">#{el}</Data></Cell>}
       else
         %{<Cell><Data ss:Type="String">#{el}</Data></Cell>}

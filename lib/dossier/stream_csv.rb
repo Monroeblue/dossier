@@ -13,17 +13,18 @@ module Dossier
     def each
       yield headers.map { |header| report.format_header(header) }.to_csv if headers?
       collection.each do |row|
-        yield headers.collect{|column| 
-                  
+        yield headers.collect{ |column|
             args = [column]
-            
-            if (row.method(column).arity == -1  rescue false)          
+
+            if (row.method(column).arity == -1  rescue false)
                args << report.options
-            end    
-                    
-            value  = row.public_send(*args)
-         
-        
+            end
+
+            if (value  = row.public_send(*args)).kind_of?(Array)
+              value.map(&:to_s).join(' ')
+            else
+              value.to_s
+            end
         }.to_csv
       end
     rescue => e
@@ -33,7 +34,7 @@ module Dossier
           yield "#{line}\n"
         end
       else
-        yield "We're sorry, but something went wrong." 
+        yield "We're sorry, but something went wrong."
       end
     end
 
