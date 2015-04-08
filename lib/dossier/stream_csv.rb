@@ -20,7 +20,13 @@ module Dossier
                args << report.options
             end
 
-            if (value  = row.public_send(*args)).kind_of?(Array)
+            value  = row.public_send(*args)
+            if report.respond_to?("export_format_#{column}") 
+              args = ["export_format_#{column}", row, value]
+              value = report.public_send(*args) 
+            end
+            
+            if (value).kind_of?(Array)
               value.map(&:to_s).join(' ')
             else
               value.to_s
