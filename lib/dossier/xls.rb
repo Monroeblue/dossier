@@ -23,23 +23,31 @@ module Dossier
     def as_cell(el)
       if el.kind_of?(Array)
         %{<Cell><Data ss:Type="String">#{el.map(&:to_s).join(', ')}</Data></Cell>}
-      elsif (Float(el.to_s) rescue false)
+      elsif el.is_a?(DateTime)
+        %{<Cell><Data ss:Type="DateTime">#{el}</Data></Cell>}
+      elsif el.is_a?(Float) || el.is_a?(Integer) || el.is_a?(BigDecimal)
         %{<Cell><Data ss:Type="Number">#{el}</Data></Cell>}
       else
-        %{<Cell><Data ss:Type="String">#{el}</Data></Cell>}
+        %{<Cell><Data ss:Type="String">#{CGI::escapeHTML(el.to_s)}</Data></Cell>}
       end
     end
 
     def as_ar_row(row)
       "<Row>\n" +  headers.collect{|column|
 
-        args = [column]
-
+        args = [column]        
         if (row.method(column).arity == -1  rescue false)
            args << report.options
         end
+        value = row.public_send(*args)
 
-        as_cell(row.public_send(*args))
+        #use export formatter for this cell, if we have one
+        if report.respond_to?("export_format_#{column}") 
+          args = ["export_format_#{column}", row, value]
+          value = report.public_send(*args) 
+        end
+          
+        as_cell(value)
 
       }.join("\n") + "\n</Row>\n"
     end

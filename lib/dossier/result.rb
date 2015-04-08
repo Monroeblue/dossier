@@ -85,7 +85,7 @@ module Dossier
               if row.is_a?(ActiveRecord::Base) 
                 args << row
               else
-                 args << row_hash(row) 
+                args << row_hash(row) 
               end
             end
             report.public_send(*args)
