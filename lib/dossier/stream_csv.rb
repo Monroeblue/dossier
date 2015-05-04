@@ -22,7 +22,7 @@ module Dossier
 
             value  = row.public_send(*args)
             if report.respond_to?("export_format_#{column}") 
-              args = ["export_format_#{column}", row, value]
+              args = ["export_format_#{column}", value, row]
               value = report.public_send(*args) 
             end
             
