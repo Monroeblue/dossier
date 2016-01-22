@@ -76,6 +76,7 @@ module Dossier
             if args[0].include?('.')
               method_chain = args.shift
               value = method_chain.split('.').inject(row){|o, a| a==method_chain.last ? o.send(a, *args) : o.send(a) }
+              method = "format_#{method_chain.gsub('.','_')}"
             else
               value = row.public_send(*args)
             end
