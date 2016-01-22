@@ -60,9 +60,9 @@ module Dossier
       end
 
       def format(row)
-       
+
         self.report.columns.each_with_index.map do |value, i|
-          
+
           if row.is_a?(ActiveRecord::Base)
             column = value
             method = "format_#{column}"
@@ -71,8 +71,14 @@ module Dossier
           #  puts "ARITY #{column}  #{row.method(column).arity}"
             if (row.method(column).arity == -1  rescue false)          
                args << self.report.options
-            end            
-            value  = row.public_send(*args)
+            end
+
+            if args[0].include?('.')
+              method_chain = args.shift
+              value = method_chain.split('.').inject(row){|o, a| a==method_chain.last ? o.send(a, *args) : o.send(a) }
+            else
+              value = row.public_send(*args)
+            end
           else
             column = report.columns[i]
             method = "format_#{column}"
