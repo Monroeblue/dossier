@@ -17,18 +17,18 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*"] + %w[MIT-LICENSE Rakefile README.md]
   s.test_files = Dir["spec/**/*"] - %w[spec/dummy/config/dossier.yml]
 
-  s.add_dependency "arel",            ">= 3.0"
-  s.add_dependency "activesupport",   ">= 3.2"
-  s.add_dependency "actionpack",      ">= 3.2"
-  s.add_dependency "actionmailer",    ">= 3.2"
-  s.add_dependency "railties",        ">= 3.2"
-  s.add_dependency "haml",            ">= 3.1"
-  s.add_dependency "write_xlsx",      ">= 0.85.5"
+  s.add_dependency "activesupport", ">= 6.0.0"
+  s.add_dependency "actionpack",    ">= 6.0.0"
+  s.add_dependency "actionmailer",  ">= 6.0.0"
+  s.add_dependency "railties",      ">= 6.0.0"
+  s.add_dependency "haml",          ">= 5.0"
+  s.add_dependency "responders",    ">= 2.4"
+  s.add_dependency "write_xlsx",    ">= 0.85.5"
 
-  s.add_development_dependency "activerecord", "~> 3.2.13"
+  s.add_development_dependency "activerecord", ">= 6.0.0"
   s.add_development_dependency "sqlite3",      ">= 1.3.6"
   s.add_development_dependency "pry",          ">= 0.9.10"
-  s.add_development_dependency "rspec-rails",  ">= 2.13.2"
+  s.add_development_dependency "rspec-rails",  ">= 3.8.3"
   s.add_development_dependency "genspec",      "~> 0.2.7"
   s.add_development_dependency "capybara",     "~> 2.1.0"
   s.add_development_dependency "simplecov",    "~> 0.7.1"
